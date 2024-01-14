@@ -15,7 +15,7 @@ workflows:
           flutter pub get
       - name: Build obfuscated apk
         script: |
-          flutter build apk --split-debug-info=debug\ --split-per-abi --obfuscate
+          flutter build apk  --split-per-abi --obfuscate --split-debug-info=debug\
     artifacts:
       - build/**/outputs/**/*.apk
     publishing:
