@@ -41,7 +41,7 @@ workflows:
         - name: Discord notification
           script: |
             set -ex
-            APP_LINK=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name=="app.apk") | .url')
+            APP_LINK=$(echo $CM_ARTIFACT_LINKS | jq -r '.[] | select(.name=="*.apk") | .url')
             
             # Get first 7 digits of commit number
             COMMIT=$(echo "${CM_COMMIT}" | sed 's/^\(........\).*/\1/;q')
