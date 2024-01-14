@@ -16,7 +16,8 @@ workflows:
       - name: Build obfuscated apk
         script: |
           flutter build apk --split-debug-info=debug\ --split-per-abi --obfuscate
-
+    artifacts:
+      - build/**/outputs/**/*.apk
     publishing:
       email:
         notify:
