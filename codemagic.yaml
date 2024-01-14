@@ -1,0 +1,29 @@
+workflows:
+  android-dev:
+    name: Android Dev
+    triggering:
+      cancel_previous_builds: true
+      events:
+        - push
+      branch_patterns:
+        - pattern: "master"
+          include: true
+          source: true
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Build obfuscated apk
+        script: |
+          flutter build apk --split-debug-info=debug\ --split-per-abi --obfuscate
+
+    publishing:
+      email:
+        notify:
+          success: true
+          failure: false
+        recipients:
+          - mohamad.samer.abdulaziz@gmail.com
+
+
+
