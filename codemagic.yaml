@@ -30,6 +30,7 @@ workflows:
     environment:
       groups:
         - discord_credentials
+      flutter: 3.10.6
     publishing:
       email:
         notify:
