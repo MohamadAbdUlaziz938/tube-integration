@@ -2,8 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import 'floating_home.dart';
+import 'overlay_home.dart';
+import 'overlays/true_caller_overlay.dart';
+
 void main() {
   runApp(const MyApp());
+}
+
+@pragma("vm:entry-point")
+void overlayMain() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: TrueCallerOverlay(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: FloatingUpperHome(),
     );
   }
 }
@@ -33,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late YoutubePlayerController _youTubeCtr;
   final formKey = GlobalKey<FormState>();
   late final TextEditingController tubeLink;
+  bool _isInPiPMode = false;
+  bool _isPlayerReady = false;
 
   void tubeListener() {
     debugPrint("player state: ${_youTubeCtr.value.playerState}");
@@ -80,6 +97,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void _enterPiPMode() async {
+    if (!_isInPiPMode) {
+      //_isInPiPMode = await FlutterOverlayWindow.enterPictureInPictureMode();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return YoutubePlayerBuilder(
@@ -93,6 +116,9 @@ class _MyHomePageState extends State<MyHomePage> {
       player: YoutubePlayer(
         controller: _youTubeCtr,
         showVideoProgressIndicator: true,
+        onReady: () {
+          _isPlayerReady = true;
+        },
         topActions: [
           const SizedBox(width: 8.0),
           Expanded(
@@ -158,8 +184,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ?.validate()) ??
                                   false;
                               if (isValid) {
-                                final videoId = YoutubePlayer.convertUrlToId(
-                                    "https://www.youtube.com/watch?v=BBAyRBTfsOU");
+                                final videoId =
+                                    YoutubePlayer.convertUrlToId(tubeLink.text);
                                 if (videoId != null) {
                                   _youTubeCtr.load(videoId);
                                 }

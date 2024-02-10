@@ -35,7 +35,7 @@ workflows:
       email:
         notify:
           success: true
-          failure: false
+          failure: true
         recipients:
           - mohamad.samer.abdulaziz@gmail.com
       scripts:
